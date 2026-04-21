@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>魔法填色画板 - 儿童互动绘画</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎨 魔法填色画板</h1>
+            <p>小朋友，快来给可爱的小动物涂上漂亮的颜色吧！</p>
+        </header>
+
+        <div class="canvas-wrapper">
+            <div class="canvas-container" id="canvasContainer">
+                <canvas id="colorLayer"></canvas>
+                <canvas id="lineArtLayer"></canvas>
+            </div>
+        </div>
+
+        <div class="palette-wrapper">
+            <div class="palette" id="palette">
+                <div class="color-option selected" data-color="#FF6B6B" style="background-color: #FF6B6B;"></div>
+                <div class="color-option" data-color="#FFD93D" style="background-color: #FFD93D;"></div>
+                <div class="color-option" data-color="#6BCB77" style="background-color: #6BCB77;"></div>
+                <div class="color-option" data-color="#4D96FF" style="background-color: #4D96FF;"></div>
+                <div class="color-option" data-color="#9B59B6" style="background-color: #9B59B6;"></div>
+                <div class="color-option" data-color="#FF9F43" style="background-color: #FF9F43;"></div>
+                <div class="color-option" data-color="#54A0FF" style="background-color: #54A0FF;"></div>
+                <div class="color-option" data-color="#A8E6CF" style="background-color: #A8E6CF;"></div>
+                <div class="color-option" data-color="#FF9FF3" style="background-color: #FF9FF3;"></div>
+                <div class="color-option" data-color="#1DD1A1" style="background-color: #1DD1A1;"></div>
+                <div class="color-option" data-color="#F368E0" style="background-color: #F368E0;"></div>
+                <div class="color-option" data-color="#74B9FF" style="background-color: #74B9FF;"></div>
+                <div class="color-option eraser" data-color="eraser" style="background-color: #FFFFFF;">
+                    <span>🧹</span>
+                    <span class="eraser-label">橡皮擦</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-clear" id="clearBtn">🗑️ 清空颜色</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
