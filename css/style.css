@@ -359,6 +359,8 @@ body {
     border-radius: 20px;
     box-shadow: 0 8px 40px var(--shadow-color);
     padding: 20px;
+    width: 840px;
+    height: 640px;
 }
 
 .canvas-wrapper canvas {
@@ -366,6 +368,8 @@ body {
     top: 20px;
     left: 20px;
     border-radius: 10px;
+    width: 800px;
+    height: 600px;
 }
 
 #mainCanvas {
@@ -1193,6 +1197,7 @@ body {
 @media (max-width: 1200px) {
     #paintPanel {
         flex-direction: column;
+        align-items: center;
     }
     
     .toolbar {
@@ -1207,6 +1212,25 @@ body {
         margin-bottom: 0;
         flex: 1;
         min-width: 200px;
+    }
+    
+    .canvas-container {
+        width: 100%;
+        padding: 10px;
+    }
+    
+    .canvas-wrapper {
+        width: 840px;
+        height: 640px;
+        transform: scale(0.75);
+        transform-origin: center center;
+    }
+}
+
+@media (max-width: 900px) {
+    .canvas-wrapper {
+        transform: scale(0.6);
+        transform-origin: center center;
     }
 }
 
@@ -1227,8 +1251,8 @@ body {
     }
     
     .canvas-wrapper {
-        transform: scale(0.8);
-        transform-origin: top left;
+        transform: scale(0.5);
+        transform-origin: center center;
     }
     
     .gallery-grid {
@@ -1237,5 +1261,17 @@ body {
     
     .theme-options {
         grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .canvas-wrapper {
+        transform: scale(0.4);
+        transform-origin: center center;
+    }
+    
+    .nav-btn {
+        padding: 8px 12px;
+        font-size: 14px;
     }
 }
