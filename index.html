@@ -3,49 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>魔法填色画板 - 儿童互动绘画</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Magic Paint - 魔法绘画</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-    <div class="container">
+<body class="spring-theme">
+    <div id="app">
+        <!-- 顶部导航栏 -->
         <header class="header">
-            <h1>🎨 魔法填色画板</h1>
-            <p>小朋友，快来给可爱的小动物涂上漂亮的颜色吧！</p>
+            <div class="logo">
+                <h1>🎨 Magic Paint</h1>
+            </div>
+            <nav class="nav">
+                <button class="nav-btn active" data-tab="paint">绘画</button>
+                <button class="nav-btn" data-tab="ai-generator">AI线稿生成</button>
+                <button class="nav-btn" data-tab="gallery">图库</button>
+                <button class="nav-btn" data-tab="settings">设置</button>
+            </nav>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span class="progress-text" id="progressText">0%</span>
+            </div>
         </header>
 
-        <div class="canvas-wrapper">
-            <div class="canvas-container" id="canvasContainer">
-                <canvas id="colorLayer"></canvas>
-                <canvas id="lineArtLayer"></canvas>
-            </div>
-        </div>
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 绘画面板 -->
+            <section id="paintPanel" class="panel active">
+                <div class="toolbar">
+                    <!-- 画笔选择 -->
+                    <div class="tool-group">
+                        <h3>画笔</h3>
+                        <div class="brush-tools">
+                            <button class="brush-btn active" data-brush="normal" title="普通画笔">✏️</button>
+                            <button class="brush-btn" data-brush="rainbow" title="彩虹笔">🌈</button>
+                            <button class="brush-btn" data-brush="gradient" title="渐变笔">🎭</button>
+                            <button class="brush-btn" data-brush="sparkle" title="闪光笔">✨</button>
+                            <button class="brush-btn" data-brush="eraser" title="橡皮擦">🧹</button>
+                        </div>
+                    </div>
 
-        <div class="palette-wrapper">
-            <div class="palette" id="palette">
-                <div class="color-option selected" data-color="#FF6B6B" style="background-color: #FF6B6B;"></div>
-                <div class="color-option" data-color="#FFD93D" style="background-color: #FFD93D;"></div>
-                <div class="color-option" data-color="#6BCB77" style="background-color: #6BCB77;"></div>
-                <div class="color-option" data-color="#4D96FF" style="background-color: #4D96FF;"></div>
-                <div class="color-option" data-color="#9B59B6" style="background-color: #9B59B6;"></div>
-                <div class="color-option" data-color="#FF9F43" style="background-color: #FF9F43;"></div>
-                <div class="color-option" data-color="#54A0FF" style="background-color: #54A0FF;"></div>
-                <div class="color-option" data-color="#A8E6CF" style="background-color: #A8E6CF;"></div>
-                <div class="color-option" data-color="#FF9FF3" style="background-color: #FF9FF3;"></div>
-                <div class="color-option" data-color="#1DD1A1" style="background-color: #1DD1A1;"></div>
-                <div class="color-option" data-color="#F368E0" style="background-color: #F368E0;"></div>
-                <div class="color-option" data-color="#74B9FF" style="background-color: #74B9FF;"></div>
-                <div class="color-option eraser" data-color="eraser" style="background-color: #FFFFFF;">
-                    <span>🧹</span>
-                    <span class="eraser-label">橡皮擦</span>
+                    <!-- 颜色选择 -->
+                    <div class="tool-group">
+                        <h3>颜色</h3>
+                        <div class="color-palette">
+                            <input type="color" id="colorPicker" value="#FF6B6B" class="color-input">
+                            <div class="preset-colors">
+                                <div class="preset-color active" style="background: #FF6B6B;" data-color="#FF6B6B"></div>
+                                <div class="preset-color" style="background: #4ECDC4;" data-color="#4ECDC4"></div>
+                                <div class="preset-color" style="background: #45B7D1;" data-color="#45B7D1"></div>
+                                <div class="preset-color" style="background: #FFD93D;" data-color="#FFD93D"></div>
+                                <div class="preset-color" style="background: #95E1D3;" data-color="#95E1D3"></div>
+                                <div class="preset-color" style="background: #333333;" data-color="#333333"></div>
+                                <div class="preset-color" style="background: #FFFFFF;" data-color="#FFFFFF"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 画笔大小 -->
+                    <div class="tool-group">
+                        <h3>大小</h3>
+                        <div class="size-control">
+                            <input type="range" id="brushSize" min="1" max="50" value="5">
+                            <span class="size-value" id="sizeValue">5</span>
+                        </div>
+                    </div>
+
+                    <!-- 粒子效果 -->
+                    <div class="tool-group">
+                        <h3>特效</h3>
+                        <div class="effect-controls">
+                            <label class="effect-toggle">
+                                <input type="checkbox" id="particleEffect" checked>
+                                <span>星星拖尾</span>
+                            </label>
+                            <label class="effect-toggle">
+                                <input type="checkbox" id="sparkleEffect" checked>
+                                <span>闪光效果</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 音效 -->
+                    <div class="tool-group">
+                        <h3>音效</h3>
+                        <div class="sound-controls">
+                            <label class="effect-toggle">
+                                <input type="checkbox" id="soundEnabled" checked>
+                                <span>画笔沙沙声</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 操作按钮 -->
+                    <div class="tool-group">
+                        <h3>操作</h3>
+                        <div class="action-buttons">
+                            <button id="undoBtn" class="action-btn">↩️ 撤销</button>
+                            <button id="redoBtn" class="action-btn">↪️ 重做</button>
+                            <button id="clearBtn" class="action-btn">🗑️ 清空</button>
+                            <button id="saveBtn" class="action-btn">💾 保存</button>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- 画布区域 -->
+                <div class="canvas-container">
+                    <div class="canvas-wrapper">
+                        <canvas id="mainCanvas" width="800" height="600"></canvas>
+                        <canvas id="particleCanvas" width="800" height="600"></canvas>
+                        <canvas id="lineartCanvas" width="800" height="600"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI线稿生成器面板 -->
+            <section id="aiGeneratorPanel" class="panel">
+                <div class="ai-container">
+                    <h2>🤖 AI 魔法线稿生成器</h2>
+                    <p class="subtitle">输入文字描述或上传照片，自动生成黑白线稿</p>
+                    
+                    <div class="ai-tabs">
+                        <button class="ai-tab active" data-mode="text">文字描述</button>
+                        <button class="ai-tab" data-mode="image">上传照片</button>
+                    </div>
+
+                    <!-- 文字描述模式 -->
+                    <div id="textMode" class="ai-mode-content active">
+                        <textarea id="promptInput" placeholder="请输入您想要生成的线稿描述...
+例如：一只可爱的小猫坐在花丛中，卡通风格"></textarea>
+                        <div class="style-options">
+                            <h4>选择风格：</h4>
+                            <div class="style-buttons">
+                                <button class="style-btn active" data-style="cartoon">卡通风格</button>
+                                <button class="style-btn" data-style="realistic">写实风格</button>
+                                <button class="style-btn" data-style="sketch">速写风格</button>
+                                <button class="style-btn" data-style="anime">动漫风格</button>
+                            </div>
+                        </div>
+                        <button id="generateBtn" class="generate-btn">✨ 生成线稿</button>
+                    </div>
+
+                    <!-- 上传照片模式 -->
+                    <div id="imageMode" class="ai-mode-content">
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-icon">📷</div>
+                            <p>点击或拖拽照片到这里</p>
+                            <input type="file" id="imageUpload" accept="image/*">
+                        </div>
+                        <div id="uploadPreview" class="upload-preview hidden">
+                            <img id="previewImage" alt="预览">
+                            <button id="removeImage" class="remove-btn">✕</button>
+                        </div>
+                        <button id="convertBtn" class="generate-btn disabled">🔄 转换为线稿</button>
+                    </div>
+
+                    <!-- 生成结果预览 -->
+                    <div id="resultSection" class="result-section hidden">
+                        <h3>生成结果</h3>
+                        <div class="result-preview">
+                            <canvas id="resultCanvas" width="800" height="600"></canvas>
+                        </div>
+                        <div class="result-actions">
+                            <button id="useLineartBtn" class="generate-btn">🖼️ 加载到画板</button>
+                            <button id="regenerateBtn" class="generate-btn secondary">🔄 重新生成</button>
+                        </div>
+                    </div>
+
+                    <!-- 加载动画 -->
+                    <div id="loadingOverlay" class="loading-overlay hidden">
+                        <div class="loading-content">
+                            <div class="loading-spinner"></div>
+                            <p>AI 正在创作中...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 图库面板 -->
+            <section id="galleryPanel" class="panel">
+                <div class="gallery-container">
+                    <h2>🖼️ 线稿图库</h2>
+                    
+                    <!-- 分类标签 -->
+                    <div class="gallery-categories">
+                        <button class="category-btn active" data-category="all">全部</button>
+                        <button class="category-btn" data-category="animals">🐾 动物</button>
+                        <button class="category-btn" data-category="nature">🌿 自然</button>
+                        <button class="category-btn" data-category="food">🍔 食物</button>
+                        <button class="category-btn" data-category="festival">🎉 节日</button>
+                        <button class="category-btn" data-category="solar">☀️ 节气</button>
+                    </div>
+
+                    <!-- 图库网格 -->
+                    <div class="gallery-grid" id="galleryGrid">
+                    </div>
+                </div>
+            </section>
+
+            <!-- 设置面板 -->
+            <section id="settingsPanel" class="panel">
+                <div class="settings-container">
+                    <h2>⚙️ 设置</h2>
+                    
+                    <!-- 主题皮肤 -->
+                    <div class="settings-section">
+                        <h3>🎨 主题皮肤</h3>
+                        <div class="theme-options" id="themeOptions">
+                            <div class="theme-option active" data-theme="spring">
+                                <div class="theme-preview spring-preview"></div>
+                                <span>春天</span>
+                            </div>
+                            <div class="theme-option" data-theme="summer">
+                                <div class="theme-preview summer-preview"></div>
+                                <span>夏天</span>
+                            </div>
+                            <div class="theme-option" data-theme="autumn">
+                                <div class="theme-preview autumn-preview"></div>
+                                <span>秋天</span>
+                            </div>
+                            <div class="theme-option" data-theme="winter">
+                                <div class="theme-preview winter-preview"></div>
+                                <span>冬天</span>
+                            </div>
+                            <div class="theme-option" data-theme="spring-festival">
+                                <div class="theme-preview spring-festival-preview"></div>
+                                <span>春节</span>
+                            </div>
+                            <div class="theme-option" data-theme="mid-autumn">
+                                <div class="theme-preview mid-autumn-preview"></div>
+                                <span>中秋</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 音效设置 -->
+                    <div class="settings-section">
+                        <h3>🔊 音效设置</h3>
+                        <div class="setting-item">
+                            <label>画笔沙沙声</label>
+                            <div class="setting-controls">
+                                <input type="range" id="brushVolume" min="0" max="100" value="50">
+                                <span class="volume-value">50%</span>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label>填满提示音</label>
+                            <div class="setting-controls">
+                                <input type="range" id="fillVolume" min="0" max="100" value="70">
+                                <span class="volume-value">70%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 动画设置 -->
+                    <div class="settings-section">
+                        <h3>🎭 动画设置</h3>
+                        <div class="setting-item">
+                            <label>粒子效果</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="particleToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>完成庆祝动画</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="celebrationToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>小兔子动画（80%进度触发）</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="bunnyToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 小兔子动画层 -->
+        <div id="bunnyLayer" class="bunny-layer hidden">
+            <div class="bunny-container">
+                <div class="bunny" id="bunny">
+                    <div class="bunny-ear left-ear"></div>
+                    <div class="bunny-ear right-ear"></div>
+                    <div class="bunny-head">
+                        <div class="bunny-eye left-eye"></div>
+                        <div class="bunny-eye right-eye"></div>
+                        <div class="bunny-nose"></div>
+                        <div class="bunny-mouth"></div>
+                    </div>
+                    <div class="bunny-body"></div>
+                    <div class="bunny-paw left-paw"></div>
+                    <div class="bunny-paw right-paw"></div>
+                    <div class="bunny-tail"></div>
+                </div>
+                <div class="bunny-bubble">太棒了！继续加油哦~ 🥕</div>
             </div>
         </div>
 
-        <div class="controls">
-            <button class="btn btn-clear" id="clearBtn">🗑️ 清空颜色</button>
+        <!-- 礼花庆祝层 -->
+        <div id="fireworksLayer" class="fireworks-layer hidden">
+            <canvas id="fireworksCanvas"></canvas>
+            <div class="celebration-text">🎉 恭喜完成！🎉</div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/sound.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/brushes.js"></script>
+    <script src="js/canvas.js"></script>
+    <script src="js/ai-generator.js"></script>
+    <script src="js/gallery.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
